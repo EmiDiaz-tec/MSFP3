@@ -175,7 +175,7 @@ $$\boxed{G(s)=\frac{F_s(s)}{F(s)}=\frac{C_sRs+1-\alpha}{R(C_p+C_s)s+1}}$$
 
 El denominador es de **primer orden**: aunque hay dos compliancias, solo una variable de estado es independiente (el voltaje en $C_s$ queda determinado por $F$ y $F_s$).
 
-### 4. Modelo en variables de estado
+### 4. Modelo en variables de estado (EDOS)
 
 Se define $\beta=\dfrac{C_s}{C_p+C_s}$ y la constante de tiempo $\tau=R(C_p+C_s)$. Como $C_sRs=\beta\,\tau s$, la función de transferencia se puede reescribir separando un término directo:
 
