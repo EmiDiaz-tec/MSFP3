@@ -99,7 +99,7 @@ Modelar, simular y controlar la respuesta de fuerza $F_s(t)$ ante un pulso de en
 
 El sistema musculoesquelético se estudia en una extensión: la fuerza $F(t)$ se aplica sobre la unidad músculo–tendón, que se modela con un elemento elástico en paralelo ($C_p$, asociado al músculo), un elemento elástico en serie ($C_s$, asociado al tendón), un elemento viscoso ($R$) y una fuerza activa $F_o(t)$ proporcional a la entrada. En el caso con tendón dañado, la lesión se representa aumentando $R$.
 
-![Esquema del sistema musculoesquelético](imagenes/Esquema_musculoesqueletico.jpeg)
+![Esquema del sistema musculoesquelético](Esquema_musculoesqueletico.jpeg)
 
 *Figura 1. Individuo sano y caso con tendón dañado. Elaborada en BioRender por Alvarez Garcia Gabriela Gissele, Bonilla Martinez Nayeli y Diaz de Leon Bernal David Emiliano.*
 
@@ -177,13 +177,29 @@ El denominador es de **primer orden**: aunque hay dos compliancias, solo una var
 
 ### 4. Modelo en variables de estado
 
-Definiendo la constante de tiempo $\tau=R(C_p+C_s)$ y un estado $z(t)$ (variable `x` en el código):
+Se define $\beta=\dfrac{C_s}{C_p+C_s}$ y la constante de tiempo $\tau=R(C_p+C_s)$. Como $C_sRs=\beta\,\tau s$, la función de transferencia se puede reescribir separando un término directo:
 
-$$\dot z(t)=\frac{F(t)-z(t)}{R(C_p+C_s)},\qquad F_s(t)=\frac{C_s}{C_p+C_s}F(t)+\left(1-\alpha-\frac{C_s}{C_p+C_s}\right)z(t)$$
+$$G(s)=\frac{C_sRs+1-\alpha}{\tau s+1}=\frac{\beta(\tau s+1)+1-\alpha-\beta}{\tau s+1}=\beta+\frac{1-\alpha-\beta}{\tau s+1}$$
 
-Tomando la transformada de Laplace de este sistema se recupera la misma $G(s)$:
+Se introduce el estado $X(s)=\dfrac{F(s)}{\tau s+1}$ (variable `x` en el código; se escribe $z$ en la sección de Euler para no confundirlo con la corriente $x(t)$ del circuito). De $(\tau s+1)X(s)=F(s)$ se obtiene, en el dominio del tiempo,
 
-$$G(s)=\frac{C_s}{C_p+C_s}+\frac{1-\alpha-\frac{C_s}{C_p+C_s}}{\tau s+1}=\frac{C_sRs+1-\alpha}{\tau s+1}$$
+$$\tau\frac{dx(t)}{dt}+x(t)=F(t)\;\Rightarrow\;\frac{dx(t)}{dt}=-\frac{x(t)}{\tau}+\frac{F(t)}{\tau}$$
+
+La salida se recupera sustituyendo $X(s)$ en $G(s)$:
+
+$$F_s(s)=\beta F(s)+X(s)\,(1-\alpha-\beta)$$
+
+y aplicando la transformada inversa de Laplace:
+
+$$F_s(t)=\beta F(t)+x(t)\,(1-\alpha-\beta)$$
+
+Sustituyendo los coeficientes, el modelo queda:
+
+$$\boxed{\frac{dx(t)}{dt}=-\frac{x(t)}{R(C_p+C_s)}+\frac{F(t)}{R(C_p+C_s)}}$$
+
+$$\boxed{F_s(t)=\frac{C_s}{C_p+C_s}F(t)+x(t)\left(1-\alpha-\frac{C_s}{C_p+C_s}\right)}$$
+
+Estas expresiones son exactamente las que programan la función `musculoesqueletico` de MATLAB y la integración de Euler de la sección de simulación.
 
 [Volver al contenido](#contenido)
 
@@ -245,20 +261,8 @@ plotsignals(x.t, x.F, x.PID, x.Fsy, x.Fsx, 'Respuestas')
 
 ### Modelo de Simulink
 
-![Diagrama general de Simulink](imagenes/Simulink_general.png)
-
-*Figura 2. Diagrama general: subsistemas Control y Caso, osciloscopios y señales enviadas al Workspace.*
-
 - **Subsistema Control** (individuo sano): recibe $F(t)$ y entrega dos salidas, `Control CE` (circuito eléctrico de Simscape con fuente de voltaje controlada, ganancia $0.25$, resistencia, capacitores y sensor de voltaje) y `Control FT` (bloque de función de transferencia). Ambas se grafican juntas para comprobar que el circuito y la función de transferencia coinciden.
 - **Subsistema Caso** (tendón dañado): contiene el mismo circuito con $R=10\ \mathrm{k\Omega}$ (`Caso CE` y `Caso FT`) y, además, el lazo de control: la señal `Control` (referencia) entra a un sumador, se resta la salida del bloque `Tratamiento` (la misma función de transferencia del caso), el error pasa por el bloque `PI(s)` y alimenta a `Tratamiento`, cuya salida es `PID(t): Caso`.
-
-![Subsistema Control](imagenes/Simulink_control.png)
-
-*Figura 3. Subsistema Control: circuito Simscape y función de transferencia.*
-
-![Subsistema Caso](imagenes/Simulink_caso.png)
-
-*Figura 4. Subsistema Caso: circuito, función de transferencia y lazo de control con PI.*
 
 ### Señales de error
 
@@ -316,9 +320,9 @@ $$K(s)=k_P+\frac{k_I}{s}=\frac{k_Ps+k_I}{s}$$
 
 La sintonización se realizó con la herramienta **PID Tuner** de Simulink sobre el bloque `PI(s)` del subsistema Caso, con tiempo de respuesta de $0.009\ \mathrm{s}$ (comparable con la constante de tiempo del control, $11\ \mathrm{ms}$) y comportamiento transitorio de $0.9$ (hacia robusto). El integrador garantiza error nulo en estado estacionario ante referencia escalón.
 
-![PID Tuner](imagenes/PID_Tuner.png)
+![PID Tuner](PID_Tuner.png)
 
-*Figura 5. PID Tuner: parámetros del controlador y desempeño en seguimiento de referencia.*
+*Figura 2. PID Tuner: parámetros del controlador y desempeño en seguimiento de referencia.*
 
 ### 3. Ganancias del controlador
 
@@ -473,12 +477,8 @@ python practica_3.py
 ├── Respuestas_matlab.pdf
 ├── EDOsys_matlab.pdf
 ├── respuesta_practica3_python.pdf
-└── imagenes/
-    ├── Esquema_musculoesqueletico.jpeg
-    ├── Simulink_general.png
-    ├── Simulink_control.png
-    ├── Simulink_caso.png
-    └── PID_Tuner.png
+├── Esquema_musculoesqueletico.jpeg
+└── PID_Tuner.png
 ```
 
 Si se usan otros nombres o subcarpetas, actualizar las rutas del README.
