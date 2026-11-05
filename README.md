@@ -48,7 +48,7 @@ Mediante superposición de dos circuitos (fuente $F(t)$ y fuente $F_o(t)$) y la 
 
 Los resultados se obtienen con MATLAB/Simulink (modelo `practica_3.slx`) y se reproducen en Python. Además, se programa el modelo en variables de estado y se integra con Euler explícito como comprobación independiente de la simulación en Simulink.
 
-**Palabras clave:** sistema musculoesquelético; tendón; unidad músculo–tendón; analogía eléctrica; función de transferencia; controlador PI; MATLAB; Simulink; Python; simulación *in silico*.
+**Palabras clave:** Circuito RLC; Controlador PID; Sistema musculoesqueletico; Modelo matemático; Simulaciones numéricas.
 
 [Volver al contenido](#contenido)
 
