@@ -99,7 +99,7 @@ Modelar, simular y controlar la respuesta de fuerza $F_s(t)$ ante un pulso de en
 
 El sistema musculoesquelético se estudia en una extensión: la fuerza $F(t)$ se aplica sobre la unidad músculo–tendón, que se modela con un elemento elástico en paralelo ($C_p$, asociado al músculo), un elemento elástico en serie ($C_s$, asociado al tendón), un elemento viscoso ($R$) y una fuerza activa $F_o(t)$ proporcional a la entrada. En el caso con tendón dañado, la lesión se representa aumentando $R$.
 
-![Esquema del sistema musculoesquelético](imagenes/Práctica 3- Sistema MusculoesqueléticoBiorender.jpeg)
+![Esquema del sistema musculoesquelético](Práctica 3- Sistema MusculoesqueléticoBiorender.jpeg)
 
 *Figura 1. Individuo sano y caso con tendón dañado. Elaborada en BioRender por Alvarez Garcia Gabriela Gissele, Bonilla Martinez Nayeli y Diaz de Leon Bernal David Emiliano.*
 
