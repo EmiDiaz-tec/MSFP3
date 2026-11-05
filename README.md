@@ -1,5 +1,4 @@
-[![Open in MATLAB Online](https://www.mathworks.com/images/responsive/global/open-in-matlab-online.svg)](https://matlab.mathworks.com/open/github/v1?repo=DrPaulValle/MSFBP0)
-
+[![Open in MATLAB Online](https://www.mathworks.com/images/responsive/global/open-in-matlab-online.svg)](https://matlab.mathworks.com/open/github/v1?repo=EmiDiaz-tec/MSFP3)
 # Práctica 3 — Modelo del sistema musculoesquelético
 
 Repositorio académico de la asignatura **Modelado de Sistemas Fisiológicos**, correspondiente al programa de **Ingeniería Biomédica** del Tecnológico Nacional de México / Instituto Tecnológico de Tijuana. Esta práctica integra el modelado matemático mediante analogías eléctricas, análisis temporal y de estabilidad, diseño y sintonización de un controlador PI, simulación computacional mediante MATLAB/Simulink y su reproducción independiente en Python para el sistema musculoesquelético en condición sana y con lesión de tendón.
